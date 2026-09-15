@@ -165,10 +165,12 @@ export const youtubeVideos = mysqlTable("youtube_videos", {
   thumbnailUrl: text("thumbnailUrl").notNull(),
   videoUrl: text("videoUrl").notNull(),
   durationSeconds: int("durationSeconds"),
+  isShort: boolean("isShort").default(false).notNull(),
   viewCount: int("viewCount").default(0).notNull(),
   likeCount: int("likeCount").default(0).notNull(),
   commentCount: int("commentCount").default(0).notNull(),
   hasApiStats: boolean("hasApiStats").default(false).notNull(),
+  discordNotifiedAt: timestamp("discordNotifiedAt"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Minecraft3DHead } from "@/components/Minecraft3DHead";
@@ -22,6 +22,8 @@ export default function Home() {
   const { data: team = [] } = trpc.team.list.useQuery();
   const { data: projects = [] } = trpc.projects.list.useQuery();
   const { data: news = [] } = trpc.news.list.useQuery();
+  const youtubeQueryInput = useMemo(() => ({ limit: 3, kind: "all" as const, sort: "latest" as const }), []);
+  const { data: youtubeOverview } = trpc.youtube.overview.useQuery(youtubeQueryInput);
 
   // Founder and lead tester priority heads
   const leadMember = team.find((m) => m.minecraftNick.toLowerCase() === "ytsmaildog") || team[0];
@@ -245,6 +247,47 @@ export default function Home() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Latest YouTube Videos */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div>
+            <span className="text-xs font-mono uppercase tracking-widest text-red-400">YouTube @YTSmailDog</span>
+            <h2 className="text-3xl font-extrabold text-zinc-100 mt-1">Последние видео</h2>
+            <p className="text-zinc-400 text-sm mt-1">Свежие публикации с превью и статистикой просмотров</p>
+          </div>
+          <Link href="/youtube" className="text-sm font-semibold text-red-300 hover:text-red-200 inline-flex items-center gap-1">
+            Все видео <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {youtubeOverview?.videos?.length ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {youtubeOverview.videos.map((video) => (
+              <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-red-500/40 transition-colors">
+                <div className="relative aspect-video overflow-hidden bg-zinc-800">
+                  <img src={video.thumbnailUrl} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <span className="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[10px] font-mono font-bold text-white">
+                    {video.isShort ? "SHORTS" : "ВИДЕО"}
+                  </span>
+                </div>
+                <div className="space-y-2 p-4">
+                  <h3 className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 group-hover:text-red-200">{video.title}</h3>
+                  <div className="flex items-center gap-3 text-[11px] font-mono text-zinc-500">
+                    <span>{new Date(video.publishedAt).toLocaleDateString("ru-RU")}</span>
+                    <span>•</span>
+                    <span>{video.viewCount.toLocaleString("ru-RU")} просмотров</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-8 text-center text-sm text-zinc-500">
+            Лента YouTube появится после первой синхронизации.
+          </div>
+        )}
       </section>
 
       {/* News & Community Section */}

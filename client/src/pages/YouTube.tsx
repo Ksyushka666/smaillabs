@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Calendar, Clock3, Eye, ExternalLink, ThumbsUp, Youtube } from "lucide-react";
+import { BarChart3, Calendar, Clock3, Eye, ExternalLink, Flame, ThumbsUp, Youtube } from "lucide-react";
+
+type VideoKind = "all" | "video" | "shorts";
+type VideoSort = "latest" | "popular";
 
 function formatCount(value: number | null | undefined) {
   return new Intl.NumberFormat("ru-RU", { notation: "compact", maximumFractionDigits: 1 }).format(value || 0);
@@ -10,13 +13,18 @@ function formatCount(value: number | null | undefined) {
 
 function formatDuration(seconds: number | null | undefined) {
   if (!seconds) return null;
-  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
   const rest = seconds % 60;
+  if (hours) return `${hours}:${String(minutes).padStart(2, "0")}:${String(rest).padStart(2, "0")}`;
   return `${minutes}:${String(rest).padStart(2, "0")}`;
 }
 
 export default function YouTube() {
-  const { data, isLoading } = trpc.youtube.overview.useQuery({ limit: 12 });
+  const [kind, setKind] = useState<VideoKind>("all");
+  const [sort, setSort] = useState<VideoSort>("latest");
+  const queryInput = useMemo(() => ({ limit: 12, kind, sort }), [kind, sort]);
+  const { data, isLoading } = trpc.youtube.overview.useQuery(queryInput);
   const stats = data?.settings;
 
   return (
@@ -30,8 +38,8 @@ export default function YouTube() {
             </span>
             <h1 className="text-3xl sm:text-5xl font-black text-zinc-100">Видео SmailDog</h1>
             <p className="text-sm leading-relaxed text-zinc-300">
-              Свежие ролики автоматически импортируются из RSS-ленты канала, а YouTube Data API добавляет
-              просмотры, лайки, комментарии, длительность и актуальную статистику канала.
+              Свежие ролики автоматически импортируются из RSS/API канала, а YouTube Data API добавляет просмотры,
+              лайки, комментарии, длительность и актуальную статистику.
             </p>
             <a
               href="https://www.youtube.com/@YTSmailDog"
@@ -59,54 +67,85 @@ export default function YouTube() {
         </div>
       </section>
 
+      <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-xs font-mono uppercase tracking-widest text-red-400">Последние публикации</span>
+          <h2 className="mt-1 text-2xl font-black text-zinc-100">Новые видео</h2>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <div className="flex rounded-xl border border-zinc-800 bg-zinc-900/70 p-1">
+            {[
+              ["all", "Все"],
+              ["video", "Видео"],
+              ["shorts", "Shorts"],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                onClick={() => setKind(value as VideoKind)}
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${kind === value ? "bg-red-600 text-white" : "text-zinc-400 hover:text-zinc-100"}`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <div className="flex rounded-xl border border-zinc-800 bg-zinc-900/70 p-1">
+            <button
+              onClick={() => setSort("latest")}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${sort === "latest" ? "bg-zinc-700 text-zinc-100" : "text-zinc-400 hover:text-zinc-100"}`}
+            >
+              <Calendar className="inline-block w-3.5 h-3.5 mr-1" />Свежие
+            </button>
+            <button
+              onClick={() => setSort("popular")}
+              className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${sort === "popular" ? "bg-amber-500 text-zinc-950" : "text-zinc-400 hover:text-zinc-100"}`}
+            >
+              <Flame className="inline-block w-3.5 h-3.5 mr-1" />Популярные
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {stats?.youtubeLastSyncedAt && (
+        <div className="-mt-7 text-xs font-mono text-zinc-500">Обновлено {new Date(stats.youtubeLastSyncedAt).toLocaleString("ru-RU")}</div>
+      )}
+
       {isLoading ? (
         <div className="py-20 text-center text-sm font-mono text-zinc-500">Загрузка видео...</div>
       ) : data?.videos?.length ? (
-        <section className="space-y-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs font-mono uppercase tracking-widest text-red-400">Последние публикации</span>
-              <h2 className="mt-1 text-2xl font-black text-zinc-100">Новые видео</h2>
-            </div>
-            {stats?.youtubeLastSyncedAt && (
-              <span className="hidden sm:block text-xs font-mono text-zinc-500">
-                Обновлено {new Date(stats.youtubeLastSyncedAt).toLocaleString("ru-RU")}
-              </span>
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {data.videos.map((video) => (
-              <article key={video.videoId} className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-red-500/40 transition-colors">
-                <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="block group">
-                  <div className="relative aspect-video overflow-hidden bg-zinc-800">
-                    <img src={video.thumbnailUrl} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                    {video.durationSeconds && (
-                      <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-mono text-white">
-                        {formatDuration(video.durationSeconds)}
-                      </span>
-                    )}
-                  </div>
-                </a>
-                <div className="space-y-3 p-5">
-                  <h3 className="line-clamp-2 text-base font-bold leading-snug text-zinc-100">{video.title}</h3>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] font-mono text-zinc-500">
-                    <span className="inline-flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(video.publishedAt).toLocaleDateString("ru-RU")}</span>
-                    <span className="inline-flex items-center gap-1"><Eye className="w-3 h-3" />{formatCount(video.viewCount)}</span>
-                    {video.hasApiStats && <span className="inline-flex items-center gap-1"><ThumbsUp className="w-3 h-3" />{formatCount(video.likeCount)}</span>}
-                  </div>
-                  <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-300 hover:text-red-200">
-                    Смотреть на YouTube <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data.videos.map((video) => (
+            <article key={video.videoId} className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-red-500/40 transition-colors">
+              <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="block group">
+                <div className="relative aspect-video overflow-hidden bg-zinc-800">
+                  <img src={video.thumbnailUrl} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                  <span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-mono font-bold ${video.isShort ? "bg-red-600 text-white" : "bg-zinc-950/85 text-zinc-200"}`}>
+                    {video.isShort ? "SHORTS" : "ВИДЕО"}
+                  </span>
+                  {video.durationSeconds && (
+                    <span className="absolute bottom-2 right-2 rounded bg-black/80 px-1.5 py-0.5 text-[11px] font-mono text-white">
+                      {formatDuration(video.durationSeconds)}
+                    </span>
+                  )}
                 </div>
-              </article>
-            ))}
-          </div>
-        </section>
+              </a>
+              <div className="space-y-3 p-5">
+                <h3 className="line-clamp-2 text-base font-bold leading-snug text-zinc-100">{video.title}</h3>
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] font-mono text-zinc-500">
+                  <span className="inline-flex items-center gap-1"><Calendar className="w-3 h-3" />{new Date(video.publishedAt).toLocaleDateString("ru-RU")}</span>
+                  <span className="inline-flex items-center gap-1"><Eye className="w-3 h-3" />{formatCount(video.viewCount)}</span>
+                  {video.hasApiStats && <span className="inline-flex items-center gap-1"><ThumbsUp className="w-3 h-3" />{formatCount(video.likeCount)}</span>}
+                </div>
+                <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-300 hover:text-red-200">
+                  Смотреть на YouTube <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
       ) : (
         <section className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-10 text-center">
           <Clock3 className="mx-auto mb-3 h-8 w-8 text-zinc-600" />
-          <p className="text-sm text-zinc-400">Лента ещё не синхронизирована. Запустите обновление из админ-панели.</p>
+          <p className="text-sm text-zinc-400">В выбранной категории пока нет роликов.</p>
           <Link href="/admin"><Button className="mt-4 bg-red-600 hover:bg-red-500 text-white">Открыть админ-панель</Button></Link>
         </section>
       )}

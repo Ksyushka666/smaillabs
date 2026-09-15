@@ -90,15 +90,17 @@ export const appRouter = router({
   // --- YouTube RSS feed + optional Data API enrichment ---
   youtube: router({
     overview: publicProcedure
-      .input(z.object({ limit: z.number().int().min(1).max(24).optional() }).optional())
+      .input(
+        z
+          .object({
+            limit: z.number().int().min(1).max(24).optional(),
+            kind: z.enum(["all", "video", "shorts"]).optional(),
+            sort: z.enum(["latest", "popular"]).optional(),
+          })
+          .optional()
+      )
       .query(async ({ input }) => {
-        const overview = await getYouTubeOverview();
-        if (!overview) return null;
-        if (!input?.limit || input.limit === 12) return overview;
-        return {
-          ...overview,
-          videos: overview.videos.slice(0, input.limit),
-        };
+        return getYouTubeOverview(input?.limit || 12, input?.kind || "all", input?.sort || "latest");
       }),
     sync: adminProcedure.mutation(async () => syncYouTubeVideos()),
   }),

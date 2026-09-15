@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { classifyYouTubeShort } from "./youtube";
 
 describe("YouTube integration configuration", () => {
   it("keeps the Data API key server-side when configured", () => {
@@ -18,4 +19,10 @@ describe("YouTube integration configuration", () => {
     const body = (await response.json()) as { items?: Array<{ id?: string }> };
     expect(body.items?.[0]?.id).toBe("UCHwDOUx1FS4mtwFcZnUGyIg");
   }, 15000);
+
+  it("classifies Shorts by hashtag or short runtime", () => {
+    expect(classifyYouTubeShort("Minecraft #shorts", 140)).toBe(true);
+    expect(classifyYouTubeShort("Quick build", 45)).toBe(true);
+    expect(classifyYouTubeShort("Full episode", 301)).toBe(false);
+  });
 });

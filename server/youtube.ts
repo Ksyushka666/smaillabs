@@ -1,6 +1,7 @@
 import { desc, eq } from "drizzle-orm";
 import { youtubeVideos, siteSettings } from "../drizzle/schema";
 import { getDb } from "./db";
+import { notifyDiscordAboutVideo } from "./discord";
 
 export const YOUTUBE_CHANNEL_ID = "UCHwDOUx1FS4mtwFcZnUGyIg";
 export const YOUTUBE_CHANNEL_HANDLE = "@YTSmailDog";
@@ -82,6 +83,10 @@ function parseIsoDuration(value: string | undefined): number | null {
   const match = value.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/i);
   if (!match) return null;
   return Number(match[1] || 0) * 3600 + Number(match[2] || 0) * 60 + Number(match[3] || 0);
+}
+
+export function classifyYouTubeShort(title: string, durationSeconds: number | null): boolean {
+  return /#shorts?\b/i.test(title) || (durationSeconds !== null && durationSeconds <= 60);
 }
 
 async function fetchJson<T>(url: string): Promise<T> {
@@ -186,16 +191,27 @@ export async function syncYouTubeVideos() {
   }
   const apiVideos = await getApiEnrichment(rssVideos.map((video) => video.videoId));
   const channelStats = await getChannelStats(channelData);
+  let notified = 0;
 
   for (const rssVideo of rssVideos) {
     const apiVideo = apiVideos.get(rssVideo.videoId);
     const apiSnippet = apiVideo?.snippet;
+    const durationSeconds = parseIsoDuration(apiVideo?.contentDetails?.duration);
+    const title = apiSnippet?.title || rssVideo.title;
+    const isShort = classifyYouTubeShort(title, durationSeconds);
+    const existingRows = await db
+      .select({ id: youtubeVideos.id, discordNotifiedAt: youtubeVideos.discordNotifiedAt })
+      .from(youtubeVideos)
+      .where(eq(youtubeVideos.videoId, rssVideo.videoId))
+      .limit(1);
+    const isNewVideo = existingRows.length === 0;
+
     await db
       .insert(youtubeVideos)
       .values({
         videoId: rssVideo.videoId,
         channelId: YOUTUBE_CHANNEL_ID,
-        title: apiSnippet?.title || rssVideo.title,
+        title,
         description: apiSnippet?.description || rssVideo.description || "",
         publishedAt: apiSnippet?.publishedAt ? new Date(apiSnippet.publishedAt) : rssVideo.publishedAt,
         thumbnailUrl:
@@ -203,7 +219,8 @@ export async function syncYouTubeVideos() {
           apiSnippet?.thumbnails?.medium?.url ||
           rssVideo.thumbnailUrl,
         videoUrl: rssVideo.videoUrl,
-        durationSeconds: parseIsoDuration(apiVideo?.contentDetails?.duration),
+        durationSeconds,
+        isShort,
         viewCount: Number(apiVideo?.statistics?.viewCount || 0),
         likeCount: Number(apiVideo?.statistics?.likeCount || 0),
         commentCount: Number(apiVideo?.statistics?.commentCount || 0),
@@ -211,20 +228,45 @@ export async function syncYouTubeVideos() {
       })
       .onDuplicateKeyUpdate({
         set: {
-          title: apiSnippet?.title || rssVideo.title,
+          title,
           description: apiSnippet?.description || rssVideo.description || "",
           publishedAt: apiSnippet?.publishedAt ? new Date(apiSnippet.publishedAt) : rssVideo.publishedAt,
           thumbnailUrl:
             apiSnippet?.thumbnails?.high?.url ||
             apiSnippet?.thumbnails?.medium?.url ||
             rssVideo.thumbnailUrl,
-          durationSeconds: parseIsoDuration(apiVideo?.contentDetails?.duration),
+          durationSeconds,
+          isShort,
           viewCount: Number(apiVideo?.statistics?.viewCount || 0),
           likeCount: Number(apiVideo?.statistics?.likeCount || 0),
           commentCount: Number(apiVideo?.statistics?.commentCount || 0),
           hasApiStats: Boolean(apiVideo),
         },
       });
+
+    if (isNewVideo && !existingRows[0]?.discordNotifiedAt && process.env.DISCORD_YOUTUBE_WEBHOOK_URL) {
+      try {
+        await notifyDiscordAboutVideo({
+          title,
+          videoUrl: rssVideo.videoUrl,
+          thumbnailUrl:
+            apiSnippet?.thumbnails?.high?.url ||
+            apiSnippet?.thumbnails?.medium?.url ||
+            rssVideo.thumbnailUrl,
+          publishedAt: apiSnippet?.publishedAt ? new Date(apiSnippet.publishedAt) : rssVideo.publishedAt,
+          viewCount: Number(apiVideo?.statistics?.viewCount || 0),
+          likeCount: Number(apiVideo?.statistics?.likeCount || 0),
+          isShort,
+        });
+        await db
+          .update(youtubeVideos)
+          .set({ discordNotifiedAt: new Date() })
+          .where(eq(youtubeVideos.videoId, rssVideo.videoId));
+        notified += 1;
+      } catch (error) {
+        console.error(`[YouTube] Discord notification failed for ${rssVideo.videoId}:`, error);
+      }
+    }
   }
 
   await db
@@ -248,19 +290,35 @@ export async function syncYouTubeVideos() {
     })
     .where(eq(siteSettings.key, "main"));
 
-  return { imported: rssVideos.length, enriched: apiVideos.size, channelStats: Boolean(channelStats), source };
+  return { imported: rssVideos.length, enriched: apiVideos.size, channelStats: Boolean(channelStats), notified, source };
 }
 
-export async function getYouTubeVideos(limit = 12) {
+export type YouTubeVideoKind = "all" | "video" | "shorts";
+export type YouTubeVideoSort = "latest" | "popular";
+
+export async function getYouTubeVideos(
+  limit = 12,
+  kind: YouTubeVideoKind = "all",
+  sort: YouTubeVideoSort = "latest"
+) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(youtubeVideos).orderBy(desc(youtubeVideos.publishedAt)).limit(limit);
+  const condition = kind === "shorts" ? eq(youtubeVideos.isShort, true) : kind === "video" ? eq(youtubeVideos.isShort, false) : undefined;
+  const query = db.select().from(youtubeVideos);
+  if (condition) {
+    return query.where(condition).orderBy(sort === "popular" ? desc(youtubeVideos.viewCount) : desc(youtubeVideos.publishedAt)).limit(limit);
+  }
+  return query.orderBy(sort === "popular" ? desc(youtubeVideos.viewCount) : desc(youtubeVideos.publishedAt)).limit(limit);
 }
 
-export async function getYouTubeOverview() {
+export async function getYouTubeOverview(
+  limit = 12,
+  kind: YouTubeVideoKind = "all",
+  sort: YouTubeVideoSort = "latest"
+) {
   const db = await getDb();
   if (!db) return null;
   const settings = await db.select().from(siteSettings).where(eq(siteSettings.key, "main")).limit(1);
-  const videos = await getYouTubeVideos(12);
+  const videos = await getYouTubeVideos(limit, kind, sort);
   return { settings: settings[0] || null, videos };
 }
