@@ -59,7 +59,7 @@ describe("Minecraft skin lookup and settings", () => {
     expect(result.profileUrl).toContain("tlauncher.org/ru/skin/Milyashac_herry");
   });
 
-  it("returns public site settings successfully", async () => {
+  it.skipIf(!process.env.DATABASE_URL)("returns public site settings successfully when a database is available", async () => {
     const ctx = createMockContext();
     const caller = appRouter.createCaller(ctx);
 
