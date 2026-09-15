@@ -15,7 +15,7 @@ export default function Projects() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono uppercase">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-950/40 text-orange-400 text-xs font-mono uppercase">
           <Blocks className="w-3.5 h-3.5" />
           Каталог разработок
         </div>
@@ -39,7 +39,7 @@ export default function Projects() {
               onClick={() => setFilter(tab.id)}
               className={
                 filter === tab.id
-                  ? "bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-semibold"
+                  ? "bg-orange-600 hover:bg-orange-500 text-zinc-950 font-semibold"
                   : "border-zinc-800 text-zinc-400 hover:text-zinc-200"
               }
             >
@@ -62,7 +62,7 @@ export default function Projects() {
           {filtered.map((project) => (
             <div
               key={project.id}
-              className="rounded-3xl overflow-hidden bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-all flex flex-col group"
+              className="rounded-3xl overflow-hidden bg-zinc-900/60 border border-zinc-800 hover:border-orange-500/40 transition-all flex flex-col group"
             >
               <div className="h-48 bg-zinc-800 relative overflow-hidden">
                 <img
@@ -74,7 +74,7 @@ export default function Projects() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-3 right-3 flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-zinc-950/80 backdrop-blur-md border border-emerald-500/30 text-emerald-400">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-zinc-950/80 backdrop-blur-md border border-orange-500/30 text-orange-400">
                     {project.version}
                   </span>
                 </div>
@@ -83,7 +83,7 @@ export default function Projects() {
               <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                 <div>
                   <div className="flex items-center gap-2 text-xs text-zinc-500 font-mono uppercase mb-2">
-                    <span className="text-emerald-400 font-semibold">{project.category}</span>
+                    <span className="text-orange-400 font-semibold">{project.category}</span>
                     <span>•</span>
                     <span>Автор: {project.authorName}</span>
                   </div>
@@ -99,7 +99,7 @@ export default function Projects() {
                       href={project.downloadUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/40 text-emerald-300 text-xs font-semibold transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-600/20 hover:bg-orange-600/30 border border-orange-500/40 text-orange-300 text-xs font-semibold transition-colors"
                     >
                       <Download className="w-3.5 h-3.5" />
                       Скачать
@@ -113,7 +113,7 @@ export default function Projects() {
                       href={project.externalLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-xs text-zinc-400 hover:text-emerald-400 inline-flex items-center gap-1"
+                      className="text-xs text-zinc-400 hover:text-orange-400 inline-flex items-center gap-1"
                     >
                       Сайт проекта <ExternalLink className="w-3 h-3" />
                     </a>

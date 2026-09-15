@@ -32,16 +32,16 @@ export default function Home() {
   return (
     <div className="space-y-20 pb-20">
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-12 pb-20 border-b border-emerald-950/40 bg-radial from-emerald-950/30 via-zinc-950 to-zinc-950">
+      <section className="relative overflow-hidden pt-12 pb-20 border-b border-orange-950/40 bg-radial from-orange-950/30 via-zinc-950 to-zinc-950">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#052e1615_1px,transparent_1px),linear-gradient(to_bottom,#052e1615_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column: Hero Text */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-                <span>{settings?.heroBadgeText || "Команда разработки и бета-проектов"}</span>
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-orange-500/30 bg-orange-950/40 text-orange-400 text-xs font-medium">
+                <Sparkles className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+                <span>{settings?.heroBadgeText || "Команда по Minecraft-контенту"}</span>
               </div>
 
               <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-100 leading-[1.1]">
@@ -55,14 +55,14 @@ export default function Home() {
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-2">
                 <Link href="/projects">
-                  <Button className="bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold px-6 h-12 shadow-lg shadow-emerald-600/20">
+                  <Button className="bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold px-6 h-12 shadow-lg shadow-orange-600/20">
                     <Blocks className="w-4 h-4 mr-2" />
                     Наши Проекты
                   </Button>
                 </Link>
 
                 <Link href="/apply">
-                  <Button variant="outline" className="border-emerald-500/40 text-emerald-300 hover:bg-emerald-950/30 h-12 px-6">
+                  <Button variant="outline" className="border-orange-500/40 text-orange-300 hover:bg-orange-950/30 h-12 px-6">
                     Вступить в команду
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
@@ -73,9 +73,9 @@ export default function Home() {
                     href={settings.youtubeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 h-12 rounded-lg bg-red-950/40 hover:bg-red-900/50 border border-red-500/40 text-red-300 text-sm font-semibold transition-colors"
+                    className="inline-flex items-center gap-2 px-4 h-12 rounded-lg bg-blue-950/40 hover:bg-blue-900/50 border border-blue-500/40 text-blue-300 text-sm font-semibold transition-colors"
                   >
-                    <Youtube className="w-4 h-4 text-red-500" />
+                    <Youtube className="w-4 h-4 text-blue-500" />
                     YouTube Канал
                   </a>
                 )}
@@ -84,9 +84,9 @@ export default function Home() {
 
             {/* Right Column: 3D Minecraft Heads Showcase */}
             <div className="lg:col-span-5 flex flex-col items-center justify-center">
-              <div className="p-8 rounded-3xl bg-zinc-900/80 border border-emerald-500/30 backdrop-blur-xl shadow-2xl relative group">
+              <div className="p-8 rounded-3xl bg-zinc-900/80 border border-orange-500/30 backdrop-blur-xl shadow-2xl relative group">
                 <div className="text-center mb-6">
-                  <span className="text-xs uppercase tracking-widest text-emerald-400 font-mono">
+                  <span className="text-xs uppercase tracking-widest text-orange-400 font-mono">
                     3D Интерактивные Головы
                   </span>
                   <h3 className="text-xl font-bold text-zinc-100 mt-1">Основатели и Тестеры</h3>
@@ -126,7 +126,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">
+            <span className="text-xs font-mono uppercase tracking-widest text-orange-400">
               Minecraft Участники
             </span>
             <h2 className="text-3xl font-extrabold text-zinc-100 mt-1">Команда SmailLabs</h2>
@@ -134,7 +134,7 @@ export default function Home() {
               Реальные скины участников с быстрыми ссылками на NameMC и TLauncher
             </p>
           </div>
-          <Link href="/team" className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1">
+          <Link href="/team" className="text-sm font-semibold text-orange-400 hover:text-orange-300 inline-flex items-center gap-1">
             Все участники ({team.length}) <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -143,7 +143,7 @@ export default function Home() {
           {team.map((member) => (
             <div
               key={member.id}
-              className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/50 transition-all hover:-translate-y-1 group"
+              className="p-6 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-orange-500/50 transition-all hover:-translate-y-1 group"
             >
               <div className="flex justify-center mb-4">
                 <Minecraft3DHead
@@ -156,7 +156,7 @@ export default function Home() {
 
               <div className="text-center space-y-1">
                 <h4 className="font-bold text-zinc-100 text-base">{member.name}</h4>
-                <p className="text-xs text-emerald-400 font-medium">{member.roleTitle}</p>
+                <p className="text-xs text-orange-400 font-medium">{member.roleTitle}</p>
                 {member.isBetaTester && (
                   <span className="inline-block mt-1 px-2 py-0.5 rounded text-[10px] bg-amber-500/15 text-amber-300 border border-amber-500/30 font-semibold">
                     Бета-тестер
@@ -174,7 +174,7 @@ export default function Home() {
                   }
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-mono text-zinc-400 hover:text-emerald-400 inline-flex items-center gap-1"
+                  className="text-xs font-mono text-zinc-400 hover:text-orange-400 inline-flex items-center gap-1"
                 >
                   <span>{member.minecraftNick}</span>
                   <ExternalLink className="w-3 h-3 text-zinc-500" />
@@ -189,7 +189,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">
+            <span className="text-xs font-mono uppercase tracking-widest text-orange-400">
               Разработка
             </span>
             <h2 className="text-3xl font-extrabold text-zinc-100 mt-1">Проекты и Бета-версии</h2>
@@ -197,7 +197,7 @@ export default function Home() {
               Наши карты, серверные плагины, моды и экспериментальные сборки
             </p>
           </div>
-          <Link href="/projects" className="text-sm font-semibold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1">
+          <Link href="/projects" className="text-sm font-semibold text-orange-400 hover:text-orange-300 inline-flex items-center gap-1">
             Смотреть все проекты <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -206,7 +206,7 @@ export default function Home() {
           {projects.slice(0, 3).map((project) => (
             <div
               key={project.id}
-              className="rounded-2xl overflow-hidden bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-all flex flex-col"
+              className="rounded-2xl overflow-hidden bg-zinc-900/60 border border-zinc-800 hover:border-orange-500/40 transition-all flex flex-col"
             >
               <div className="h-44 bg-zinc-800 relative overflow-hidden">
                 <img
@@ -218,7 +218,7 @@ export default function Home() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 <div className="absolute top-3 right-3">
-                  <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-zinc-950/80 backdrop-blur-md border border-emerald-500/30 text-emerald-400">
+                  <span className="px-2.5 py-1 rounded-full text-xs font-mono font-bold bg-zinc-950/80 backdrop-blur-md border border-orange-500/30 text-orange-400">
                     {project.version}
                   </span>
                 </div>
@@ -238,7 +238,7 @@ export default function Home() {
                   </span>
                   <Link
                     href={`/projects`}
-                    className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1"
+                    className="text-xs font-semibold text-orange-400 hover:text-orange-300 inline-flex items-center gap-1"
                   >
                     Подробнее <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
@@ -253,11 +253,11 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
-            <span className="text-xs font-mono uppercase tracking-widest text-red-400">YouTube @YTSmailDog</span>
+            <span className="text-xs font-mono uppercase tracking-widest text-blue-400">YouTube @YTSmailDog</span>
             <h2 className="text-3xl font-extrabold text-zinc-100 mt-1">Последние видео</h2>
             <p className="text-zinc-400 text-sm mt-1">Свежие публикации с превью и статистикой просмотров</p>
           </div>
-          <Link href="/youtube" className="text-sm font-semibold text-red-300 hover:text-red-200 inline-flex items-center gap-1">
+          <Link href="/youtube" className="text-sm font-semibold text-blue-300 hover:text-blue-200 inline-flex items-center gap-1">
             Все видео <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -265,15 +265,15 @@ export default function Home() {
         {youtubeOverview?.videos?.length ? (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {youtubeOverview.videos.map((video) => (
-              <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-red-500/40 transition-colors">
+              <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="group overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-blue-500/40 transition-colors">
                 <div className="relative aspect-video overflow-hidden bg-zinc-800">
                   <img src={video.thumbnailUrl} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <span className="absolute left-2 top-2 rounded-full bg-red-600 px-2 py-1 text-[10px] font-mono font-bold text-white">
+                  <span className="absolute left-2 top-2 rounded-full bg-blue-600 px-2 py-1 text-[10px] font-mono font-bold text-white">
                     {video.isShort ? "SHORTS" : "ВИДЕО"}
                   </span>
                 </div>
                 <div className="space-y-2 p-4">
-                  <h3 className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 group-hover:text-red-200">{video.title}</h3>
+                  <h3 className="line-clamp-2 text-sm font-bold leading-snug text-zinc-100 group-hover:text-blue-200">{video.title}</h3>
                   <div className="flex items-center gap-3 text-[11px] font-mono text-zinc-500">
                     <span>{new Date(video.publishedAt).toLocaleDateString("ru-RU")}</span>
                     <span>•</span>
@@ -297,10 +297,10 @@ export default function Home() {
           <div className="lg:col-span-8 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Newspaper className="w-5 h-5 text-emerald-400" />
+                <Newspaper className="w-5 h-5 text-orange-400" />
                 <h3 className="text-xl font-bold text-zinc-100">Новости и Обновления</h3>
               </div>
-              <Link href="/news" className="text-xs font-semibold text-emerald-400 hover:text-emerald-300">
+              <Link href="/news" className="text-xs font-semibold text-orange-400 hover:text-orange-300">
                 Все новости
               </Link>
             </div>
@@ -309,7 +309,7 @@ export default function Home() {
               {news.slice(0, 2).map((item) => (
                 <div
                   key={item.id}
-                  className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/30 transition-all flex flex-col sm:flex-row gap-4 items-start"
+                  className="p-5 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-orange-500/30 transition-all flex flex-col sm:flex-row gap-4 items-start"
                 >
                   {item.coverUrl && (
                     <img
@@ -322,7 +322,7 @@ export default function Home() {
                     <div className="flex items-center gap-2 text-[11px] text-zinc-400 font-mono">
                       <span>{new Date(item.createdAt).toLocaleDateString("ru-RU")}</span>
                       <span>•</span>
-                      <span className="text-emerald-400">@{item.authorNick}</span>
+                      <span className="text-orange-400">@{item.authorNick}</span>
                     </div>
                     <h4 className="text-base font-bold text-zinc-100">{item.title}</h4>
                     <p className="text-xs text-zinc-400 line-clamp-2">{item.excerpt}</p>
@@ -333,9 +333,9 @@ export default function Home() {
           </div>
 
           {/* Join SmailLabs CTA Card */}
-          <div className="lg:col-span-4 p-6 rounded-3xl bg-gradient-to-br from-emerald-950/60 to-zinc-900 border border-emerald-500/30 flex flex-col justify-between">
+          <div className="lg:col-span-4 p-6 rounded-3xl bg-gradient-to-br from-orange-950/60 to-zinc-900 border border-orange-500/30 flex flex-col justify-between">
             <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-orange-500/20 text-orange-400 flex items-center justify-center">
                 <Users className="w-5 h-5" />
               </div>
               <h3 className="text-xl font-bold text-zinc-100">Ищем разработчиков и тестеров!</h3>
@@ -346,7 +346,7 @@ export default function Home() {
 
             <div className="pt-6">
               <Link href="/apply">
-                <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold">
+                <Button className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold">
                   Заполнить заявку
                 </Button>
               </Link>

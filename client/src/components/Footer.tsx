@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
           {/* Brand Column */}
           <div className="md:col-span-2 space-y-3">
             <div className="flex items-center gap-2">
-              <span className="text-lg font-bold text-emerald-400">
+              <span className="text-lg font-bold text-orange-400">
                 {settings?.title || "SmailLabs"}
               </span>
               <span className="text-[10px] bg-zinc-900 border border-zinc-800 text-zinc-400 px-2 py-0.5 rounded font-mono">
@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
                   href={settings.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-xs text-red-400 hover:text-red-300 transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors"
                 >
                   <Youtube className="w-4 h-4" />
                   YouTube @ytsmaildog
@@ -46,32 +46,32 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link href="/projects" className="hover:text-emerald-400 transition-colors">
+                <Link href="/projects" className="hover:text-orange-400 transition-colors">
                   Проекты и Бета-версии
                 </Link>
               </li>
               <li>
-                <Link href="/team" className="hover:text-emerald-400 transition-colors">
+                <Link href="/team" className="hover:text-orange-400 transition-colors">
                   Команда и Скины
                 </Link>
               </li>
               <li>
-                <Link href="/news" className="hover:text-emerald-400 transition-colors">
+                <Link href="/news" className="hover:text-orange-400 transition-colors">
                   Новости сообщества
                 </Link>
               </li>
               <li>
-                <Link href="/youtube" className="hover:text-red-400 transition-colors">
+                <Link href="/youtube" className="hover:text-blue-400 transition-colors">
                   Видео @YTSmailDog
                 </Link>
               </li>
               <li>
-                <Link href="/forum" className="hover:text-emerald-400 transition-colors">
+                <Link href="/forum" className="hover:text-orange-400 transition-colors">
                   Форум и Обсуждения
                 </Link>
               </li>
               <li>
-                <Link href="/apply" className="hover:text-emerald-400 transition-colors">
+                <Link href="/apply" className="hover:text-orange-400 transition-colors">
                   Подать заявку в команду
                 </Link>
               </li>
@@ -89,7 +89,7 @@ export const Footer: React.FC = () => {
                   href="https://namemc.com/profile/YTSmailDog"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-emerald-400 inline-flex items-center gap-1 transition-colors"
+                  className="hover:text-orange-400 inline-flex items-center gap-1 transition-colors"
                 >
                   NameMC (YTSmailDog Лицензия)
                   <ExternalLink className="w-3 h-3 text-zinc-500" />
@@ -100,15 +100,15 @@ export const Footer: React.FC = () => {
                   href="https://tlauncher.org/ru/skin/Milyashac_herry"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-emerald-400 inline-flex items-center gap-1 transition-colors"
+                  className="hover:text-orange-400 inline-flex items-center gap-1 transition-colors"
                 >
                   TLauncher (Milyashac_herry Пиратка)
                   <ExternalLink className="w-3 h-3 text-zinc-500" />
                 </a>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-emerald-400 inline-flex items-center gap-1 transition-colors">
-                  <Shield className="w-3 h-3 text-emerald-500" />
+                <Link href="/admin" className="hover:text-orange-400 inline-flex items-center gap-1 transition-colors">
+                  <Shield className="w-3 h-3 text-orange-500" />
                   Управление порталом
                 </Link>
               </li>
@@ -119,7 +119,7 @@ export const Footer: React.FC = () => {
         <div className="pt-6 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-400 gap-3">
           <p>© {new Date().getFullYear()} SmailLabs Team. Все права сохранены.</p>
           <p className="flex items-center gap-1">
-            Сделано для Minecraft сообщества с <Heart className="w-3 h-3 text-emerald-500 fill-emerald-500" />
+            Сделано для Minecraft сообщества с <Heart className="w-3 h-3 text-orange-500 fill-orange-500" />
           </p>
         </div>
       </div>

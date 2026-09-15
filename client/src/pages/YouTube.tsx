@@ -35,10 +35,10 @@ export default function YouTube() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
-      <section className="rounded-3xl border border-red-500/25 bg-gradient-to-br from-red-950/30 via-zinc-900/70 to-zinc-950 p-8 sm:p-10">
+      <section className="rounded-3xl border border-blue-500/25 bg-gradient-to-br from-blue-950/30 via-zinc-900/70 to-zinc-950 p-8 sm:p-10">
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
           <div className="space-y-4 max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-red-500/30 bg-red-950/40 px-3 py-1 text-xs font-mono uppercase text-red-300">
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-950/40 px-3 py-1 text-xs font-mono uppercase text-blue-300">
               <Youtube className="w-3.5 h-3.5" />
               Автоматическая лента канала
             </span>
@@ -51,7 +51,7 @@ export default function YouTube() {
               href="https://www.youtube.com/@YTSmailDog"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-red-300 hover:text-red-200"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-300 hover:text-blue-200"
             >
               Открыть канал @YTSmailDog <ExternalLink className="w-4 h-4" />
             </a>
@@ -64,7 +64,7 @@ export default function YouTube() {
               ["Видео", stats?.youtubeVideoCount],
             ].map(([label, value]) => (
               <div key={String(label)} className="rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 text-center">
-                <BarChart3 className="w-4 h-4 mx-auto mb-2 text-red-400" />
+                <BarChart3 className="w-4 h-4 mx-auto mb-2 text-blue-400" />
                 <div className="text-xl font-black text-zinc-100">{formatCount(value as number)}</div>
                 <div className="mt-1 text-[10px] uppercase tracking-wide text-zinc-500">{label}</div>
               </div>
@@ -75,7 +75,7 @@ export default function YouTube() {
 
       <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-red-400">Последние публикации</span>
+          <span className="text-xs font-mono uppercase tracking-widest text-blue-400">Последние публикации</span>
           <h2 className="mt-1 text-2xl font-black text-zinc-100">Новые видео</h2>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ export default function YouTube() {
               <button
                 key={value}
                 onClick={() => setKind(value as VideoKind)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${kind === value ? "bg-red-600 text-white" : "text-zinc-400 hover:text-zinc-100"}`}
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${kind === value ? "bg-blue-600 text-white" : "text-zinc-400 hover:text-zinc-100"}`}
               >
                 {label}
               </button>
@@ -129,11 +129,11 @@ export default function YouTube() {
       ) : data?.videos?.length ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {data.videos.map((video) => (
-            <article key={video.videoId} className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-red-500/40 transition-colors">
+            <article key={video.videoId} className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-900/60 hover:border-blue-500/40 transition-colors">
               <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="block group">
                 <div className="relative aspect-video overflow-hidden bg-zinc-800">
                   <img src={video.thumbnailUrl} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-                  <span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-mono font-bold ${video.isShort ? "bg-red-600 text-white" : "bg-zinc-950/85 text-zinc-200"}`}>
+                  <span className={`absolute left-2 top-2 rounded-full px-2 py-1 text-[10px] font-mono font-bold ${video.isShort ? "bg-blue-600 text-white" : "bg-zinc-950/85 text-zinc-200"}`}>
                     {video.isShort ? "SHORTS" : "ВИДЕО"}
                   </span>
                   {video.durationSeconds && (
@@ -150,7 +150,7 @@ export default function YouTube() {
                   <span className="inline-flex items-center gap-1"><Eye className="w-3 h-3" />{formatCount(video.viewCount)}</span>
                   {video.hasApiStats && <span className="inline-flex items-center gap-1"><ThumbsUp className="w-3 h-3" />{formatCount(video.likeCount)}</span>}
                 </div>
-                <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-300 hover:text-red-200">
+                <a href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-300 hover:text-blue-200">
                   Смотреть на YouTube <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -161,7 +161,7 @@ export default function YouTube() {
         <section className="rounded-2xl border border-zinc-800 bg-zinc-900/40 p-10 text-center">
           <Clock3 className="mx-auto mb-3 h-8 w-8 text-zinc-600" />
           <p className="text-sm text-zinc-400">В выбранной категории пока нет роликов.</p>
-          <Link href="/admin"><Button className="mt-4 bg-red-600 hover:bg-red-500 text-white">Открыть админ-панель</Button></Link>
+          <Link href="/admin"><Button className="mt-4 bg-blue-600 hover:bg-blue-500 text-white">Открыть админ-панель</Button></Link>
         </section>
       )}
     </div>

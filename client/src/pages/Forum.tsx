@@ -74,7 +74,7 @@ export default function Forum() {
       {/* Forum Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-950/40 text-orange-400 text-xs font-mono uppercase">
             <MessageSquare className="w-3.5 h-3.5" />
             Комьюнити Форум
           </div>
@@ -88,7 +88,7 @@ export default function Forum() {
           {isAuthenticated ? (
             <Dialog open={newThreadOpen} onOpenChange={setNewThreadOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold">
+                <Button className="bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold">
                   <Plus className="w-4 h-4 mr-1.5" />
                   Создать тему
                 </Button>
@@ -140,7 +140,7 @@ export default function Forum() {
                       })
                     }
                     disabled={createThreadMutation.isPending || !threadTitle || !threadContent}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                    className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                   >
                     {createThreadMutation.isPending ? "Публикация..." : "Опубликовать тему"}
                   </Button>
@@ -164,7 +164,7 @@ export default function Forum() {
             }}
             className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
               selectedCat === undefined
-                ? "bg-emerald-500/15 text-emerald-400 font-semibold border border-emerald-500/30"
+                ? "bg-orange-500/15 text-orange-400 font-semibold border border-orange-500/30"
                 : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
             }`}
           >
@@ -179,7 +179,7 @@ export default function Forum() {
               }}
               className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                 selectedCat === cat.id
-                  ? "bg-emerald-500/15 text-emerald-400 font-semibold border border-emerald-500/30"
+                  ? "bg-orange-500/15 text-orange-400 font-semibold border border-orange-500/30"
                   : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900"
               }`}
             >
@@ -200,7 +200,7 @@ export default function Forum() {
                 <div className="flex items-center justify-between">
                   <button
                     onClick={() => setActiveThreadId(null)}
-                    className="text-xs text-emerald-400 hover:underline font-mono"
+                    className="text-xs text-orange-400 hover:underline font-mono"
                   >
                     ← Вернуться к списку тем
                   </button>
@@ -248,12 +248,12 @@ export default function Forum() {
 
                 <div className="flex items-center gap-2">
                   {activeThreadData.thread.isPinned && (
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono">
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-orange-500/20 text-orange-300 border border-orange-500/40 font-mono">
                       Закреплено
                     </span>
                   )}
                   {activeThreadData.thread.isLocked && (
-                    <span className="px-2 py-0.5 rounded text-[10px] bg-red-500/20 text-red-300 border border-red-500/40 font-mono">
+                    <span className="px-2 py-0.5 rounded text-[10px] bg-blue-500/20 text-blue-300 border border-blue-500/40 font-mono">
                       Закрыто для ответов
                     </span>
                   )}
@@ -276,13 +276,13 @@ export default function Forum() {
                           post.authorMinecraftNick || "MHF_Steve"
                         )}/64.png`}
                         alt=""
-                        className="w-10 h-10 rounded-lg border border-emerald-500/30"
+                        className="w-10 h-10 rounded-lg border border-orange-500/30"
                       />
                       <span className="text-[11px] font-semibold text-zinc-300 truncate max-w-[70px]">
                         {post.authorName}
                       </span>
                       {post.authorMinecraftNick && (
-                        <span className="text-[9px] text-emerald-400 font-mono">
+                        <span className="text-[9px] text-orange-400 font-mono">
                           {post.authorMinecraftNick}
                         </span>
                       )}
@@ -319,13 +319,13 @@ export default function Forum() {
                       })
                     }
                     disabled={createReplyMutation.isPending || !replyContent}
-                    className="bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                    className="bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                   >
                     {createReplyMutation.isPending ? "Отправка..." : "Отправить ответ"}
                   </Button>
                 </div>
               ) : activeThreadData.thread.isLocked ? (
-                <div className="p-4 rounded-xl bg-red-950/20 border border-red-900/30 text-xs text-red-300 text-center font-mono">
+                <div className="p-4 rounded-xl bg-blue-950/20 border border-blue-900/30 text-xs text-blue-300 text-center font-mono">
                   Тема закрыта администратором. Новые сообщения отключены.
                 </div>
               ) : null}
@@ -342,22 +342,22 @@ export default function Forum() {
                   <div
                     key={thread.id}
                     onClick={() => setActiveThreadId(thread.id)}
-                    className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-emerald-500/40 transition-all cursor-pointer flex items-center justify-between gap-4 group"
+                    className="p-5 rounded-2xl bg-zinc-900/50 border border-zinc-800 hover:border-orange-500/40 transition-all cursor-pointer flex items-center justify-between gap-4 group"
                   >
                     <div className="space-y-1.5 flex-1">
                       <div className="flex items-center gap-2">
                         {thread.isPinned && (
-                          <Pin className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+                          <Pin className="w-3.5 h-3.5 text-orange-400 fill-orange-400" />
                         )}
-                        {thread.isLocked && <Lock className="w-3.5 h-3.5 text-red-400" />}
-                        <h4 className="text-base font-bold text-zinc-100 group-hover:text-emerald-400 transition-colors">
+                        {thread.isLocked && <Lock className="w-3.5 h-3.5 text-blue-400" />}
+                        <h4 className="text-base font-bold text-zinc-100 group-hover:text-orange-400 transition-colors">
                           {thread.title}
                         </h4>
                       </div>
                       <div className="flex items-center gap-3 text-xs text-zinc-400 font-mono">
                         <span>Автор: {thread.authorName}</span>
                         {thread.authorMinecraftNick && (
-                          <span className="text-emerald-400">({thread.authorMinecraftNick})</span>
+                          <span className="text-orange-400">({thread.authorMinecraftNick})</span>
                         )}
                         <span>•</span>
                         <span>{new Date(thread.updatedAt).toLocaleDateString("ru-RU")}</span>

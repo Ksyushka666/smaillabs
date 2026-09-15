@@ -119,7 +119,7 @@ export async function getSiteSettings() {
     themePreset: "emerald-dark",
     primaryColor: "#10b981",
     accentColor: "#3b82f6",
-    heroBadgeText: "Команда разработки и бета-проектов",
+    heroBadgeText: "Команда по Minecraft-контенту",
     heroTitle: "SmailLabs — инновации в Minecraft и вебе",
     heroDescription:
       "Официальный портал команды SmailLabs. Мы создаем смелые Minecraft-проекты, серверные моды, бета-лаунчеры и собираем дружную команду разработчиков, билдеров и тестеров.",

@@ -8,7 +8,7 @@ export default function News() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-10">
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono uppercase">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-950/40 text-orange-400 text-xs font-mono uppercase">
           <Newspaper className="w-3.5 h-3.5" />
           Блог и Патчноуты
         </div>
@@ -31,7 +31,7 @@ export default function News() {
           {news.map((item) => (
             <article
               key={item.id}
-              className="p-8 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-all space-y-4"
+              className="p-8 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-orange-500/40 transition-all space-y-4"
             >
               {item.coverUrl && (
                 <div className="h-64 w-full rounded-2xl overflow-hidden bg-zinc-800">
@@ -45,7 +45,7 @@ export default function News() {
 
               <div className="flex items-center gap-4 text-xs font-mono text-zinc-400">
                 <span className="flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-emerald-400" />
+                  <Calendar className="w-3.5 h-3.5 text-orange-400" />
                   {new Date(item.createdAt).toLocaleDateString("ru-RU", {
                     year: "numeric",
                     month: "long",
@@ -54,7 +54,7 @@ export default function News() {
                 </span>
                 <span>•</span>
                 <span className="flex items-center gap-1">
-                  <User className="w-3.5 h-3.5 text-emerald-400" />
+                  <User className="w-3.5 h-3.5 text-orange-400" />
                   Автор: @{item.authorNick}
                 </span>
               </div>

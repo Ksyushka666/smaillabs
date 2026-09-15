@@ -246,7 +246,7 @@ export default function Admin() {
       {/* Admin Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-800 pb-6">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/40 bg-emerald-950/40 text-emerald-400 text-xs font-mono uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-orange-500/40 bg-orange-950/40 text-orange-400 text-xs font-mono uppercase">
             <Shield className="w-3.5 h-3.5" />
             Панель управления SmailLabs
           </div>
@@ -364,7 +364,7 @@ export default function Admin() {
                 <Button
                   onClick={() => updateSettingsMutation.mutate(settingsForm)}
                   disabled={updateSettingsMutation.isPending}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                  className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                 >
                   {updateSettingsMutation.isPending ? "Сохранение..." : "Сохранить внешний вид"}
                 </Button>
@@ -373,11 +373,11 @@ export default function Admin() {
 
             {/* Live Preview Card */}
             <div className="lg:col-span-5 p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 space-y-4">
-              <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider block">
+              <span className="text-xs font-mono text-orange-400 uppercase tracking-wider block">
                 Live Preview карточки
               </span>
-              <div className="p-6 rounded-2xl bg-zinc-950 border border-emerald-500/30 space-y-3">
-                <span className="text-[10px] font-mono text-emerald-400 border border-emerald-500/40 px-2 py-0.5 rounded-full">
+              <div className="p-6 rounded-2xl bg-zinc-950 border border-orange-500/30 space-y-3">
+                <span className="text-[10px] font-mono text-orange-400 border border-orange-500/40 px-2 py-0.5 rounded-full">
                   {settingsForm.heroBadgeText || "Бейдж"}
                 </span>
                 <h4 className="text-xl font-black text-zinc-100">
@@ -387,7 +387,7 @@ export default function Admin() {
                   {settingsForm.heroDescription || "Текст описания..."}
                 </p>
                 <div className="flex gap-2 pt-2">
-                  <Button size="sm" className="bg-emerald-600 text-zinc-950 font-bold h-8 text-xs">
+                  <Button size="sm" className="bg-orange-600 text-zinc-950 font-bold h-8 text-xs">
                     Кнопка действия
                   </Button>
                 </div>
@@ -457,7 +457,7 @@ export default function Admin() {
                     id="betaTesterCheck"
                     checked={teamForm.isBetaTester}
                     onChange={(e) => setTeamForm({ ...teamForm, isBetaTester: e.target.checked })}
-                    className="w-4 h-4 rounded text-emerald-600 bg-zinc-950 border-zinc-800"
+                    className="w-4 h-4 rounded text-orange-600 bg-zinc-950 border-zinc-800"
                   />
                   <label htmlFor="betaTesterCheck" className="text-xs text-zinc-300 font-mono">
                     Отметить как Бета-тестера
@@ -487,7 +487,7 @@ export default function Admin() {
                 <Button
                   onClick={() => upsertTeamMutation.mutate(teamForm)}
                   disabled={upsertTeamMutation.isPending || !teamForm.name || !teamForm.minecraftNick}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                  className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                 >
                   {teamForm.id ? "Обновить данные" : "Добавить в команду"}
                 </Button>
@@ -507,7 +507,7 @@ export default function Admin() {
                       <img
                         src={`https://minotar.net/helm/${encodeURIComponent(member.minecraftNick)}/48.png`}
                         alt=""
-                        className="w-10 h-10 rounded-lg border border-emerald-500/30"
+                        className="w-10 h-10 rounded-lg border border-orange-500/30"
                       />
                       <div>
                         <div className="font-bold text-zinc-100 text-sm flex items-center gap-2">
@@ -518,7 +518,7 @@ export default function Admin() {
                             </span>
                           )}
                         </div>
-                        <div className="text-xs text-emerald-400 font-mono">
+                        <div className="text-xs text-orange-400 font-mono">
                           {member.roleTitle} • Ник: {member.minecraftNick} ({member.skinSourceType})
                         </div>
                       </div>
@@ -633,7 +633,7 @@ export default function Admin() {
                 <Button
                   onClick={() => upsertProjectMutation.mutate(projectForm)}
                   disabled={upsertProjectMutation.isPending || !projectForm.title || !projectForm.slug}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                  className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                 >
                   {projectForm.id ? "Обновить проект" : "Опубликовать проект"}
                 </Button>
@@ -737,7 +737,7 @@ export default function Admin() {
                 <Button
                   onClick={() => upsertNewsMutation.mutate(newsForm)}
                   disabled={upsertNewsMutation.isPending || !newsForm.title || !newsForm.slug}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold"
+                  className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold"
                 >
                   {newsForm.id ? "Обновить новость" : "Опубликовать новость"}
                 </Button>
@@ -811,11 +811,11 @@ export default function Admin() {
                         <img
                           src={`https://minotar.net/helm/${encodeURIComponent(app.minecraftNick)}/48.png`}
                           alt=""
-                          className="w-10 h-10 rounded-lg border border-emerald-500/30"
+                          className="w-10 h-10 rounded-lg border border-orange-500/30"
                         />
                         <div>
                           <div className="font-bold text-zinc-100">{app.nickname}</div>
-                          <div className="text-xs text-emerald-400 font-mono">
+                          <div className="text-xs text-orange-400 font-mono">
                             Minecraft: {app.minecraftNick} ({app.skinSourceType}) • Роль: {app.roleDesired}
                           </div>
                         </div>
@@ -825,9 +825,9 @@ export default function Admin() {
                         <span
                           className={`text-xs px-2.5 py-1 rounded-full font-mono uppercase ${
                             app.status === "accepted"
-                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                              ? "bg-orange-500/20 text-orange-300 border border-orange-500/40"
                               : app.status === "rejected"
-                              ? "bg-red-500/20 text-red-300 border border-red-500/40"
+                              ? "bg-blue-500/20 text-blue-300 border border-blue-500/40"
                               : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                           }`}
                         >
@@ -841,7 +841,7 @@ export default function Admin() {
                         <Button
                           size="sm"
                           onClick={() => updateAppMutation.mutate({ id: app.id, status: "accepted" })}
-                          className="bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold h-7 text-xs"
+                          className="bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold h-7 text-xs"
                         >
                           Принять
                         </Button>
@@ -888,10 +888,10 @@ export default function Admin() {
               </p>
             </div>
 
-            <div className="p-8 border-2 border-dashed border-zinc-700 hover:border-emerald-500/50 rounded-2xl flex flex-col items-center justify-center space-y-3 bg-zinc-950/40">
-              <FileUp className="w-10 h-10 text-emerald-400" />
+            <div className="p-8 border-2 border-dashed border-zinc-700 hover:border-orange-500/50 rounded-2xl flex flex-col items-center justify-center space-y-3 bg-zinc-950/40">
+              <FileUp className="w-10 h-10 text-orange-400" />
               <div className="text-center">
-                <label className="cursor-pointer bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold px-4 py-2 rounded-lg text-xs transition-colors inline-block">
+                <label className="cursor-pointer bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold px-4 py-2 rounded-lg text-xs transition-colors inline-block">
                   {uploadLoading ? "Загрузка..." : "Выбрать файл для загрузки"}
                   <input
                     type="file"
@@ -919,7 +919,7 @@ export default function Admin() {
                       href={f.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-emerald-400 hover:underline font-mono"
+                      className="text-orange-400 hover:underline font-mono"
                     >
                       Открыть →
                     </a>
@@ -935,7 +935,7 @@ export default function Admin() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-5 p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 space-y-5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center">
                   <Youtube className="w-5 h-5" />
                 </div>
                 <div>
@@ -963,11 +963,11 @@ export default function Admin() {
                 </div>
                 <div className="space-y-3 text-sm text-zinc-300">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={settingsForm.discordNotificationsEnabled} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotificationsEnabled: e.target.checked })} className="accent-red-500" />
+                    <input type="checkbox" checked={settingsForm.discordNotificationsEnabled} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotificationsEnabled: e.target.checked })} className="accent-blue-500" />
                     Отправлять уведомления в Discord
                   </label>
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" checked={settingsForm.discordNotifyShorts} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotifyShorts: e.target.checked })} className="accent-red-500" />
+                    <input type="checkbox" checked={settingsForm.discordNotifyShorts} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotifyShorts: e.target.checked })} className="accent-blue-500" />
                     Уведомлять о Shorts
                   </label>
                 </div>
@@ -991,7 +991,7 @@ export default function Admin() {
                   })}
                   disabled={updateSettingsMutation.isPending}
                   variant="outline"
-                  className="w-full border-red-500/40 text-red-300 hover:bg-red-950/30"
+                  className="w-full border-blue-500/40 text-blue-300 hover:bg-blue-950/30"
                 >
                   {updateSettingsMutation.isPending ? "Сохранение..." : "Сохранить настройки YouTube и Discord"}
                 </Button>
@@ -999,7 +999,7 @@ export default function Admin() {
               <Button
                 onClick={() => syncYouTubeMutation.mutate()}
                 disabled={syncYouTubeMutation.isPending}
-                className="w-full bg-red-600 hover:bg-red-500 text-white font-bold"
+                className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold"
               >
                 <RefreshCw className={`w-4 h-4 mr-2 ${syncYouTubeMutation.isPending ? "animate-spin" : ""}`} />
                 {syncYouTubeMutation.isPending ? "Синхронизация..." : "Обновить сейчас"}
@@ -1015,7 +1015,7 @@ export default function Admin() {
               <h3 className="text-lg font-bold text-zinc-100">Последние импортированные видео</h3>
               <div className="space-y-2">
                 {(youtubeOverview?.videos || []).map((video) => (
-                  <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="p-3 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-500/40 flex gap-3 items-center">
+                  <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="p-3 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-blue-500/40 flex gap-3 items-center">
                     <img src={video.thumbnailUrl} alt="" className="w-28 aspect-video rounded-lg object-cover bg-zinc-800" />
                     <div className="min-w-0">
                       <div className="font-bold text-sm text-zinc-100 line-clamp-2">{video.title}</div>

@@ -42,7 +42,7 @@ export default function Apply() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 space-y-10">
       <div className="text-center space-y-3">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-950/40 text-emerald-400 text-xs font-mono uppercase">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-orange-500/30 bg-orange-950/40 text-orange-400 text-xs font-mono uppercase">
           <UserCheck className="w-3.5 h-3.5" />
           Набор в команду
         </div>
@@ -53,8 +53,8 @@ export default function Apply() {
       </div>
 
       {submitted ? (
-        <div className="p-10 rounded-3xl bg-zinc-900/80 border border-emerald-500/40 text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+        <div className="p-10 rounded-3xl bg-zinc-900/80 border border-orange-500/40 text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center mx-auto">
             <ShieldCheck className="w-8 h-8" />
           </div>
           <h3 className="text-2xl font-bold text-zinc-100">Заявка принята на рассмотрение!</h3>
@@ -186,7 +186,7 @@ export default function Apply() {
             <Button
               type="submit"
               disabled={applyMutation.isPending}
-              className="w-full bg-emerald-600 hover:bg-emerald-500 text-zinc-950 font-bold h-12 text-base shadow-lg shadow-emerald-600/20"
+              className="w-full bg-orange-600 hover:bg-orange-500 text-zinc-950 font-bold h-12 text-base shadow-lg shadow-orange-600/20"
             >
               {applyMutation.isPending ? "Отправка..." : "Отправить заявку в SmailLabs"}
             </Button>
@@ -194,7 +194,7 @@ export default function Apply() {
 
           {/* Real-time 3D Skin preview */}
           <div className="md:col-span-4 p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 text-center space-y-4">
-            <span className="text-xs font-mono uppercase text-emerald-400 tracking-wider">
+            <span className="text-xs font-mono uppercase text-orange-400 tracking-wider">
               Предпросмотр 3D-Головы
             </span>
             <div className="py-4 flex justify-center">
