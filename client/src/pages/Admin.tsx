@@ -98,7 +98,7 @@ export default function Admin() {
     name: "",
     roleTitle: "",
     minecraftNick: "",
-    skinSourceType: "licensed" as "licensed" | "tlauncher",
+    skinSourceType: "licensed" as "licensed" | "tlauncher" | "elyby",
     bio: "",
     isBetaTester: false,
     orderIndex: 0,
@@ -441,12 +441,13 @@ export default function Admin() {
                     <select
                       value={teamForm.skinSourceType}
                       onChange={(e) =>
-                        setTeamForm({ ...teamForm, skinSourceType: e.target.value as "licensed" | "tlauncher" })
+                        setTeamForm({ ...teamForm, skinSourceType: e.target.value as "licensed" | "tlauncher" | "elyby" })
                       }
                       className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-xs text-zinc-200"
                     >
                       <option value="licensed">Лицензия (NameMC)</option>
                       <option value="tlauncher">Пиратка (TLauncher)</option>
+                      <option value="elyby">Ely.by (живая текстура)</option>
                     </select>
                   </div>
                 </div>

@@ -1,0 +1,1 @@
+ALTER TABLE `users` MODIFY COLUMN `minecraftSkinType` enum('licensed','tlauncher','elyby') NOT NULL DEFAULT 'licensed';

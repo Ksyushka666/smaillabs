@@ -17,7 +17,7 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 });
 
 // Helper for Minecraft skin URL resolution
-function getMinecraftSkinData(nick: string, sourceType: "licensed" | "tlauncher") {
+function getMinecraftSkinData(nick: string, sourceType: "licensed" | "tlauncher" | "elyby") {
   const cleanNick = nick.trim();
   if (sourceType === "licensed") {
     return {
@@ -27,6 +27,19 @@ function getMinecraftSkinData(nick: string, sourceType: "licensed" | "tlauncher"
       head2dUrl: `https://minotar.net/helm/${cleanNick}/128.png`,
       profileUrl: `https://namemc.com/profile/${cleanNick}`,
       sourceName: "NameMC / Mojang (Лицензия)",
+    };
+  }
+
+  if (sourceType === "elyby") {
+    const encodedNick = encodeURIComponent(cleanNick);
+    const elySkinUrl = `https://skinsystem.ely.by/skins/${encodedNick}.png`;
+    return {
+      nick: cleanNick,
+      sourceType: "elyby" as const,
+      skinTextureUrl: elySkinUrl,
+      head2dUrl: `https://minotar.net/helm/${encodedNick}/128.png`,
+      profileUrl: `https://ely.by/${encodedNick}`,
+      sourceName: "Ely.by (Живая текстура)",
     };
   }
 
@@ -79,7 +92,7 @@ export const appRouter = router({
       .input(
         z.object({
           nick: z.string().min(1),
-          sourceType: z.enum(["licensed", "tlauncher"]).default("licensed"),
+          sourceType: z.enum(["licensed", "tlauncher", "elyby"]).default("licensed"),
         })
       )
       .query(({ input }) => {
@@ -157,7 +170,7 @@ export const appRouter = router({
           name: z.string().min(1),
           roleTitle: z.string().min(1),
           minecraftNick: z.string().min(1),
-          skinSourceType: z.enum(["licensed", "tlauncher"]).default("licensed"),
+          skinSourceType: z.enum(["licensed", "tlauncher", "elyby"]).default("licensed"),
           skinUrl: z.string().optional(),
           bio: z.string().optional(),
           orderIndex: z.number().default(0),
@@ -343,7 +356,7 @@ export const appRouter = router({
         z.object({
           nickname: z.string().min(2),
           minecraftNick: z.string().min(2),
-          skinSourceType: z.enum(["licensed", "tlauncher"]).default("licensed"),
+          skinSourceType: z.enum(["licensed", "tlauncher", "elyby"]).default("licensed"),
           age: z.number().min(10).max(99).optional(),
           roleDesired: z.string().min(2),
           contacts: z.string().min(3),

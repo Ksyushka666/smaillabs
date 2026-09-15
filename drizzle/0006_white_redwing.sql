@@ -1,0 +1,2 @@
+ALTER TABLE `team_applications` MODIFY COLUMN `skinSourceType` enum('licensed','tlauncher','elyby') NOT NULL DEFAULT 'licensed';--> statement-breakpoint
+ALTER TABLE `team_members` MODIFY COLUMN `skinSourceType` enum('licensed','tlauncher','elyby') NOT NULL DEFAULT 'licensed';

@@ -11,7 +11,7 @@ export default function Apply() {
   const [form, setForm] = useState({
     nickname: "",
     minecraftNick: "",
-    skinSourceType: "licensed" as "licensed" | "tlauncher",
+    skinSourceType: "licensed" as "licensed" | "tlauncher" | "elyby",
     age: 16,
     roleDesired: "Разработчик плагинов / Модмейкер",
     contacts: "",
@@ -119,12 +119,13 @@ export default function Apply() {
                 <select
                   value={form.skinSourceType}
                   onChange={(e) =>
-                    setForm({ ...form, skinSourceType: e.target.value as "licensed" | "tlauncher" })
+                    setForm({ ...form, skinSourceType: e.target.value as "licensed" | "tlauncher" | "elyby" })
                   }
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-200"
                 >
                   <option value="licensed">Лицензия (Mojang / NameMC)</option>
                   <option value="tlauncher">Пиратка (TLauncher)</option>
+                  <option value="elyby">Ely.by (живая текстура)</option>
                 </select>
               </div>
             </div>

@@ -97,12 +97,12 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="https://tlauncher.org/ru/skin/Milyashac_herry"
+                  href="https://ely.by/Milyasha_cherry"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-orange-400 inline-flex items-center gap-1 transition-colors"
                 >
-                  TLauncher (Milyashac_herry Пиратка)
+                  Ely.by (Milyasha_cherry, живая текстура)
                   <ExternalLink className="w-3 h-3 text-zinc-500" />
                 </a>
               </li>

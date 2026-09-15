@@ -15,7 +15,7 @@ export default function Team() {
         </div>
         <h1 className="text-3xl sm:text-5xl font-black text-zinc-100">Команда SmailLabs</h1>
         <p className="text-zinc-400 text-sm leading-relaxed">
-          Каждый участник представлен интерактивной 3D-головой со своим реальным скином. Клик по нику открывает профиль игрока на NameMC или TLauncher.
+          Каждый участник представлен интерактивной 3D-головой со своим реальным скином. Клик по нику открывает профиль игрока на NameMC, Ely.by или TLauncher.
         </p>
       </div>
 
@@ -35,7 +35,7 @@ export default function Team() {
                 <Minecraft3DHead
                   nick={member.minecraftNick}
                   sourceType={member.skinSourceType as any}
-                  size={100}
+                  size={120}
                   interactive={true}
                   showProfileLink={false}
                 />
@@ -58,11 +58,11 @@ export default function Team() {
               {/* Direct links to player skin profile */}
               <div className="pt-4 border-t border-zinc-800 w-full flex flex-col items-center gap-2">
                 <a
-                  href={
-                    member.skinSourceType === "licensed"
-                      ? `https://namemc.com/profile/${encodeURIComponent(member.minecraftNick)}`
-                      : `https://tlauncher.org/ru/skin/${encodeURIComponent(member.minecraftNick)}`
-                  }
+                  href={member.skinSourceType === "licensed"
+                    ? `https://namemc.com/profile/${encodeURIComponent(member.minecraftNick)}`
+                    : member.skinSourceType === "elyby"
+                      ? `https://ely.by/${encodeURIComponent(member.minecraftNick)}`
+                      : `https://tlauncher.org/ru/skin/${encodeURIComponent(member.minecraftNick)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-950/40 hover:bg-orange-900/50 border border-orange-500/30 text-orange-300 text-xs font-semibold transition-colors"
@@ -74,7 +74,9 @@ export default function Team() {
                 <span className="text-[10px] text-zinc-500 font-mono uppercase">
                   {member.skinSourceType === "licensed"
                     ? "Лицензия Mojang / NameMC"
-                    : "Пиратка / База скинов TLauncher"}
+                    : member.skinSourceType === "elyby"
+                      ? "Ely.by / Живая текстура кожи"
+                      : "Пиратка / База скинов TLauncher"}
                 </span>
               </div>
             </div>

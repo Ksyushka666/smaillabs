@@ -84,7 +84,7 @@ export default function Home() {
 
             {/* Right Column: 3D Minecraft Heads Showcase */}
             <div className="lg:col-span-5 flex flex-col items-center justify-center">
-              <div className="p-8 rounded-3xl bg-zinc-900/80 border border-orange-500/30 backdrop-blur-xl shadow-2xl relative group">
+              <div className="p-5 sm:p-8 rounded-3xl bg-zinc-900/80 border border-orange-500/30 backdrop-blur-xl shadow-2xl relative group">
                 <div className="text-center mb-6">
                   <span className="text-xs uppercase tracking-widest text-orange-400 font-mono">
                     3D Интерактивные Головы
@@ -93,20 +93,20 @@ export default function Home() {
                   <p className="text-xs text-zinc-400">Покрутите курсором мыши, чтобы рассмотреть скин</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-8 items-center justify-center">
+                <div className="grid grid-cols-2 gap-3 sm:gap-6 items-center justify-center">
                   {/* YTSmailDog head */}
                   <Minecraft3DHead
                     nick={leadMember ? leadMember.minecraftNick : "YTSmailDog"}
                     sourceType={leadMember ? (leadMember.skinSourceType as any) : "licensed"}
-                    size={110}
+                    size={128}
                     subTitle={leadMember ? leadMember.roleTitle : "Основатель / Lead Dev"}
                   />
 
-                  {/* Milyashac_herry head */}
+                  {/* Milyasha_cherry head */}
                   <Minecraft3DHead
-                    nick={betaTesterMember ? betaTesterMember.minecraftNick : "Milyashac_herry"}
-                    sourceType={betaTesterMember ? (betaTesterMember.skinSourceType as any) : "tlauncher"}
-                    size={110}
+                    nick={betaTesterMember ? betaTesterMember.minecraftNick : "Milyasha_cherry"}
+                    sourceType={betaTesterMember ? (betaTesterMember.skinSourceType as any) : "elyby"}
+                    size={128}
                     subTitle={betaTesterMember ? betaTesterMember.roleTitle : "Бета-тестер"}
                   />
                 </div>
@@ -167,11 +167,11 @@ export default function Home() {
 
               <div className="mt-4 pt-3 border-t border-zinc-800 flex items-center justify-center gap-2">
                 <a
-                  href={
-                    member.skinSourceType === "licensed"
-                      ? `https://namemc.com/profile/${encodeURIComponent(member.minecraftNick)}`
-                      : `https://tlauncher.org/ru/skin/${encodeURIComponent(member.minecraftNick)}`
-                  }
+                  href={member.skinSourceType === "licensed"
+                    ? `https://namemc.com/profile/${encodeURIComponent(member.minecraftNick)}`
+                    : member.skinSourceType === "elyby"
+                      ? `https://ely.by/${encodeURIComponent(member.minecraftNick)}`
+                      : `https://tlauncher.org/ru/skin/${encodeURIComponent(member.minecraftNick)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs font-mono text-zinc-400 hover:text-orange-400 inline-flex items-center gap-1"
