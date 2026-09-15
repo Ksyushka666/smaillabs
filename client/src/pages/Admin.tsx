@@ -20,6 +20,7 @@ import {
   Trash2,
   Users,
   XCircle,
+  Youtube,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -34,6 +35,14 @@ export default function Admin() {
   const { data: news = [] } = trpc.news.list.useQuery({ includeUnpublished: true });
   const { data: applications = [] } = trpc.applications.list.useQuery();
   const { data: files = [] } = trpc.files.list.useQuery();
+  const { data: youtubeOverview } = trpc.youtube.overview.useQuery({ limit: 6 });
+  const syncYouTubeMutation = trpc.youtube.sync.useMutation({
+    onSuccess: (result) => {
+      toast.success(`YouTube обновлён: ${result.imported} видео, ${result.enriched} со статистикой`);
+      utils.youtube.overview.invalidate();
+    },
+    onError: (error) => toast.error(error.message || "Не удалось обновить YouTube"),
+  });
 
   // Settings State
   const [settingsForm, setSettingsForm] = useState({
@@ -263,6 +272,10 @@ export default function Admin() {
           <TabsTrigger value="files" className="gap-2 text-xs">
             <FileUp className="w-3.5 h-3.5" />
             Файлы и Storage
+          </TabsTrigger>
+          <TabsTrigger value="youtube" className="gap-2 text-xs">
+            <Youtube className="w-3.5 h-3.5" />
+            YouTube
           </TabsTrigger>
         </TabsList>
 
@@ -901,6 +914,55 @@ export default function Admin() {
                       Открыть →
                     </a>
                   </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* --- Tab 7: YouTube RSS + Data API --- */}
+        <TabsContent value="youtube">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-5 p-6 rounded-3xl bg-zinc-900/60 border border-zinc-800 space-y-5">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-500/15 text-red-400 flex items-center justify-center">
+                  <Youtube className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-zinc-100">Синхронизация YouTube</h3>
+                  <p className="text-xs text-zinc-500 font-mono">@YTSmailDog</p>
+                </div>
+              </div>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                RSS импортирует свежие публикации, а серверный YouTube Data API добавляет превью высокого качества,
+                просмотры, лайки, комментарии, длительность и статистику канала.
+              </p>
+              <Button
+                onClick={() => syncYouTubeMutation.mutate()}
+                disabled={syncYouTubeMutation.isPending}
+                className="w-full bg-red-600 hover:bg-red-500 text-white font-bold"
+              >
+                <RefreshCw className={`w-4 h-4 mr-2 ${syncYouTubeMutation.isPending ? "animate-spin" : ""}`} />
+                {syncYouTubeMutation.isPending ? "Синхронизация..." : "Обновить сейчас"}
+              </Button>
+              <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 text-xs font-mono text-zinc-500 space-y-1">
+                <div>Канал: {youtubeOverview?.settings?.youtubeChannelId || "не синхронизирован"}</div>
+                <div>Статус: {youtubeOverview?.settings?.youtubeLastSyncStatus || "ожидает запуска"}</div>
+                <div>Видео в базе: {youtubeOverview?.videos?.length || 0}</div>
+                <div>API-статистика: {youtubeOverview?.videos?.filter((video) => video.hasApiStats).length || 0}</div>
+              </div>
+            </div>
+            <div className="lg:col-span-7 space-y-3">
+              <h3 className="text-lg font-bold text-zinc-100">Последние импортированные видео</h3>
+              <div className="space-y-2">
+                {(youtubeOverview?.videos || []).map((video) => (
+                  <a key={video.videoId} href={video.videoUrl} target="_blank" rel="noopener noreferrer" className="p-3 rounded-2xl bg-zinc-900/60 border border-zinc-800 hover:border-red-500/40 flex gap-3 items-center">
+                    <img src={video.thumbnailUrl} alt="" className="w-28 aspect-video rounded-lg object-cover bg-zinc-800" />
+                    <div className="min-w-0">
+                      <div className="font-bold text-sm text-zinc-100 line-clamp-2">{video.title}</div>
+                      <div className="text-xs text-zinc-500 font-mono mt-1">{video.viewCount.toLocaleString("ru-RU")} просмотров {video.hasApiStats ? "• API OK" : "• RSS"}</div>
+                    </div>
+                  </a>
                 ))}
               </div>
             </div>

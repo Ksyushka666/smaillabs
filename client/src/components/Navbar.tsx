@@ -15,6 +15,7 @@ export const Navbar: React.FC = () => {
     { href: "/projects", label: "Проекты" },
     { href: "/team", label: "Команда" },
     { href: "/news", label: "Новости" },
+    { href: "/youtube", label: "YouTube" },
     { href: "/forum", label: "Форум" },
     { href: "/apply", label: "Вступить в команду" },
   ];

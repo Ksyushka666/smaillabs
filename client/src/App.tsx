@@ -15,6 +15,7 @@ import News from "./pages/News";
 import Forum from "./pages/Forum";
 import Apply from "./pages/Apply";
 import Admin from "./pages/Admin";
+import YouTube from "./pages/YouTube";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
           <Route path="/news" component={News} />
           <Route path="/forum" component={Forum} />
           <Route path="/apply" component={Apply} />
+          <Route path="/youtube" component={YouTube} />
           <Route path="/admin" component={Admin} />
           <Route path="/404" component={NotFound} />
           <Route component={NotFound} />

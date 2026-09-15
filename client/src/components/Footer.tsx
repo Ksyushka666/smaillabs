@@ -61,6 +61,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/youtube" className="hover:text-red-400 transition-colors">
+                  Видео @YTSmailDog
+                </Link>
+              </li>
+              <li>
                 <Link href="/forum" className="hover:text-emerald-400 transition-colors">
                   Форум и Обсуждения
                 </Link>

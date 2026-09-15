@@ -6,6 +6,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { storagePut } from "./storage";
+import { getYouTubeOverview, syncYouTubeVideos } from "./youtube";
 
 // Middleware for Admin procedures
 const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
@@ -84,6 +85,22 @@ export const appRouter = router({
       .query(({ input }) => {
         return getMinecraftSkinData(input.nick, input.sourceType);
       }),
+  }),
+
+  // --- YouTube RSS feed + optional Data API enrichment ---
+  youtube: router({
+    overview: publicProcedure
+      .input(z.object({ limit: z.number().int().min(1).max(24).optional() }).optional())
+      .query(async ({ input }) => {
+        const overview = await getYouTubeOverview();
+        if (!overview) return null;
+        if (!input?.limit || input.limit === 12) return overview;
+        return {
+          ...overview,
+          videos: overview.videos.slice(0, input.limit),
+        };
+      }),
+    sync: adminProcedure.mutation(async () => syncYouTubeVideos()),
   }),
 
   // --- Settings & Visual Customizer ---

@@ -15,6 +15,20 @@
       "when": 1789445814436,
       "tag": "0001_burly_orphan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1789447845866,
+      "tag": "0002_thankful_robin_chapel",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1789448034148,
+      "tag": "0003_lowly_omega_sentinel",
+      "breakpoints": true
     }
   ]
 }

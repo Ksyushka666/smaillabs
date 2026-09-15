@@ -35,6 +35,18 @@ export const siteSettings = mysqlTable("site_settings", {
   heroDescription: text("heroDescription"),
   enable3dHeads: boolean("enable3dHeads").default(true).notNull(),
   layoutConfig: text("layoutConfig"),
+  youtubeChannelId: varchar("youtubeChannelId", { length: 64 }),
+  youtubeChannelHandle: varchar("youtubeChannelHandle", { length: 128 }),
+  youtubeChannelTitle: varchar("youtubeChannelTitle", { length: 255 }),
+  youtubeChannelDescription: text("youtubeChannelDescription"),
+  youtubeChannelThumbnailUrl: text("youtubeChannelThumbnailUrl"),
+  youtubeSubscriberCount: int("youtubeSubscriberCount").default(0),
+  youtubeChannelViewCount: int("youtubeChannelViewCount").default(0),
+  youtubeVideoCount: int("youtubeVideoCount").default(0),
+  youtubeLastSyncedAt: timestamp("youtubeLastSyncedAt"),
+  youtubeLastSyncStatus: varchar("youtubeLastSyncStatus", { length: 32 }),
+  youtubeLastSyncError: text("youtubeLastSyncError"),
+  youtubeScheduleCronTaskUid: varchar("youtubeScheduleCronTaskUid", { length: 65 }),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
@@ -141,4 +153,22 @@ export const uploadedFiles = mysqlTable("uploaded_files", {
   sizeBytes: int("sizeBytes").default(0),
   uploadedBy: varchar("uploadedBy", { length: 128 }).default("Admin"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export const youtubeVideos = mysqlTable("youtube_videos", {
+  id: int("id").autoincrement().primaryKey(),
+  videoId: varchar("videoId", { length: 32 }).notNull().unique(),
+  channelId: varchar("channelId", { length: 64 }).notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  description: text("description").notNull(),
+  publishedAt: timestamp("publishedAt").notNull(),
+  thumbnailUrl: text("thumbnailUrl").notNull(),
+  videoUrl: text("videoUrl").notNull(),
+  durationSeconds: int("durationSeconds"),
+  viewCount: int("viewCount").default(0).notNull(),
+  likeCount: int("likeCount").default(0).notNull(),
+  commentCount: int("commentCount").default(0).notNull(),
+  hasApiStats: boolean("hasApiStats").default(false).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });

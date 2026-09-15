@@ -2,12 +2,17 @@ import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
+import { eq } from "drizzle-orm";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "./oauth";
 import { registerStorageProxy } from "./storageProxy";
 import { appRouter } from "../routers";
 import { createContext } from "./context";
 import { serveStatic, setupVite } from "./vite";
+import { sdk } from "./sdk";
+import { syncYouTubeVideos } from "../youtube";
+import { getDb } from "../db";
+import { siteSettings } from "../../drizzle/schema";
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
@@ -36,6 +41,34 @@ async function startServer() {
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
   registerStorageProxy(app);
   registerOAuthRoutes(app);
+  app.post("/api/scheduled/youtube-sync", async (req, res) => {
+    try {
+      const user = await sdk.authenticateRequest(req);
+      if (!user.isCron || !user.taskUid) {
+        return res.status(403).json({ error: "cron-only" });
+      }
+      const db = await getDb();
+      const ownedJob = db
+        ? await db
+            .select({ id: siteSettings.id })
+            .from(siteSettings)
+            .where(eq(siteSettings.youtubeScheduleCronTaskUid, user.taskUid))
+            .limit(1)
+        : [];
+      if (!ownedJob.length) {
+        return res.json({ ok: true, skipped: "orphan" });
+      }
+      const result = await syncYouTubeVideos();
+      return res.json({ ok: true, taskUid: user.taskUid, ...result });
+    } catch (error) {
+      return res.status(500).json({
+        error: String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        context: { url: req.originalUrl },
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
   // tRPC API
   app.use(
     "/api/trpc",
