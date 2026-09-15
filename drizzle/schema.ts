@@ -47,6 +47,10 @@ export const siteSettings = mysqlTable("site_settings", {
   youtubeLastSyncStatus: varchar("youtubeLastSyncStatus", { length: 32 }),
   youtubeLastSyncError: text("youtubeLastSyncError"),
   youtubeScheduleCronTaskUid: varchar("youtubeScheduleCronTaskUid", { length: 65 }),
+  youtubeSyncFrequency: varchar("youtubeSyncFrequency", { length: 32 }).default("daily").notNull(),
+  discordNotificationsEnabled: boolean("discordNotificationsEnabled").default(true).notNull(),
+  discordNotifyShorts: boolean("discordNotifyShorts").default(true).notNull(),
+  discordNotificationFormat: varchar("discordNotificationFormat", { length: 16 }).default("embed").notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 

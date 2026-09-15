@@ -124,6 +124,10 @@ export async function getSiteSettings() {
     heroDescription:
       "Официальный портал команды SmailLabs. Мы создаем смелые Minecraft-проекты, серверные моды, бета-лаунчеры и собираем дружную команду разработчиков, билдеров и тестеров.",
     enable3dHeads: true,
+    youtubeSyncFrequency: "daily",
+    discordNotificationsEnabled: true,
+    discordNotifyShorts: true,
+    discordNotificationFormat: "embed",
     layoutConfig: JSON.stringify({
       showHero: true,
       showTeam: true,

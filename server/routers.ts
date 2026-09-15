@@ -96,11 +96,12 @@ export const appRouter = router({
             limit: z.number().int().min(1).max(24).optional(),
             kind: z.enum(["all", "video", "shorts"]).optional(),
             sort: z.enum(["latest", "popular"]).optional(),
+            search: z.string().max(120).optional(),
           })
           .optional()
       )
       .query(async ({ input }) => {
-        return getYouTubeOverview(input?.limit || 12, input?.kind || "all", input?.sort || "latest");
+        return getYouTubeOverview(input?.limit || 12, input?.kind || "all", input?.sort || "latest", input?.search || "");
       }),
     sync: adminProcedure.mutation(async () => syncYouTubeVideos()),
   }),
@@ -118,6 +119,10 @@ export const appRouter = router({
           logoUrl: z.string().optional(),
           youtubeUrl: z.string().optional(),
           discordUrl: z.string().optional(),
+          youtubeSyncFrequency: z.enum(["manual", "hourly", "every_6_hours", "daily"]).optional(),
+          discordNotificationsEnabled: z.boolean().optional(),
+          discordNotifyShorts: z.boolean().optional(),
+          discordNotificationFormat: z.enum(["embed", "text"]).optional(),
           themePreset: z.string().optional(),
           primaryColor: z.string().optional(),
           accentColor: z.string().optional(),

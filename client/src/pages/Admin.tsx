@@ -51,6 +51,10 @@ export default function Admin() {
     logoUrl: "",
     youtubeUrl: "",
     discordUrl: "",
+    youtubeSyncFrequency: "daily" as "manual" | "hourly" | "every_6_hours" | "daily",
+    discordNotificationsEnabled: true,
+    discordNotifyShorts: true,
+    discordNotificationFormat: "embed" as "embed" | "text",
     primaryColor: "#10b981",
     accentColor: "#3b82f6",
     heroBadgeText: "",
@@ -66,6 +70,12 @@ export default function Admin() {
         logoUrl: settings.logoUrl || "",
         youtubeUrl: settings.youtubeUrl || "",
         discordUrl: settings.discordUrl || "",
+        youtubeSyncFrequency: (["manual", "hourly", "every_6_hours", "daily"] as const).includes(settings.youtubeSyncFrequency as "manual" | "hourly" | "every_6_hours" | "daily")
+          ? (settings.youtubeSyncFrequency as "manual" | "hourly" | "every_6_hours" | "daily")
+          : "daily",
+        discordNotificationsEnabled: settings.discordNotificationsEnabled,
+        discordNotifyShorts: settings.discordNotifyShorts,
+        discordNotificationFormat: settings.discordNotificationFormat === "text" ? "text" : "embed",
         primaryColor: settings.primaryColor,
         accentColor: settings.accentColor,
         heroBadgeText: settings.heroBadgeText || "",
@@ -937,6 +947,55 @@ export default function Admin() {
                 RSS импортирует свежие публикации, а серверный YouTube Data API добавляет превью высокого качества,
                 просмотры, лайки, комментарии, длительность и статистику канала.
               </p>
+              <div className="space-y-4 rounded-2xl border border-zinc-800 bg-zinc-950/60 p-4">
+                <div>
+                  <label className="text-xs font-mono text-zinc-400 block mb-1">Частота синхронизации</label>
+                  <select
+                    value={settingsForm.youtubeSyncFrequency}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, youtubeSyncFrequency: e.target.value as typeof settingsForm.youtubeSyncFrequency })}
+                    className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200"
+                  >
+                    <option value="manual">Только вручную</option>
+                    <option value="hourly">Каждый час</option>
+                    <option value="every_6_hours">Каждые 6 часов</option>
+                    <option value="daily">Раз в день</option>
+                  </select>
+                </div>
+                <div className="space-y-3 text-sm text-zinc-300">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={settingsForm.discordNotificationsEnabled} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotificationsEnabled: e.target.checked })} className="accent-red-500" />
+                    Отправлять уведомления в Discord
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={settingsForm.discordNotifyShorts} onChange={(e) => setSettingsForm({ ...settingsForm, discordNotifyShorts: e.target.checked })} className="accent-red-500" />
+                    Уведомлять о Shorts
+                  </label>
+                </div>
+                <div>
+                  <label className="text-xs font-mono text-zinc-400 block mb-1">Формат уведомления</label>
+                  <select
+                    value={settingsForm.discordNotificationFormat}
+                    onChange={(e) => setSettingsForm({ ...settingsForm, discordNotificationFormat: e.target.value as typeof settingsForm.discordNotificationFormat })}
+                    className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-sm text-zinc-200"
+                  >
+                    <option value="embed">Красивый Embed с превью</option>
+                    <option value="text">Короткое текстовое сообщение</option>
+                  </select>
+                </div>
+                <Button
+                  onClick={() => updateSettingsMutation.mutate({
+                    youtubeSyncFrequency: settingsForm.youtubeSyncFrequency,
+                    discordNotificationsEnabled: settingsForm.discordNotificationsEnabled,
+                    discordNotifyShorts: settingsForm.discordNotifyShorts,
+                    discordNotificationFormat: settingsForm.discordNotificationFormat,
+                  })}
+                  disabled={updateSettingsMutation.isPending}
+                  variant="outline"
+                  className="w-full border-red-500/40 text-red-300 hover:bg-red-950/30"
+                >
+                  {updateSettingsMutation.isPending ? "Сохранение..." : "Сохранить настройки YouTube и Discord"}
+                </Button>
+              </div>
               <Button
                 onClick={() => syncYouTubeMutation.mutate()}
                 disabled={syncYouTubeMutation.isPending}

@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
-import { BarChart3, Calendar, Clock3, Eye, ExternalLink, Flame, ThumbsUp, Youtube } from "lucide-react";
+import { BarChart3, Calendar, Clock3, Eye, ExternalLink, Flame, Search, ThumbsUp, Youtube } from "lucide-react";
 
 type VideoKind = "all" | "video" | "shorts";
 type VideoSort = "latest" | "popular";
@@ -23,7 +23,13 @@ function formatDuration(seconds: number | null | undefined) {
 export default function YouTube() {
   const [kind, setKind] = useState<VideoKind>("all");
   const [sort, setSort] = useState<VideoSort>("latest");
-  const queryInput = useMemo(() => ({ limit: 12, kind, sort }), [kind, sort]);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  useEffect(() => {
+    const timer = window.setTimeout(() => setDebouncedSearch(search.trim()), 250);
+    return () => window.clearTimeout(timer);
+  }, [search]);
+  const queryInput = useMemo(() => ({ limit: 12, kind, sort, search: debouncedSearch }), [kind, sort, debouncedSearch]);
   const { data, isLoading } = trpc.youtube.overview.useQuery(queryInput);
   const stats = data?.settings;
 
@@ -73,6 +79,15 @@ export default function YouTube() {
           <h2 className="mt-1 text-2xl font-black text-zinc-100">Новые видео</h2>
         </div>
         <div className="flex flex-wrap gap-2">
+          <label className="flex items-center gap-2 rounded-xl border border-zinc-800 bg-zinc-900/70 px-3 py-1.5 text-zinc-400">
+            <Search className="w-3.5 h-3.5" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Поиск по названию"
+              className="w-44 bg-transparent text-xs text-zinc-200 outline-none placeholder:text-zinc-600"
+            />
+          </label>
           <div className="flex rounded-xl border border-zinc-800 bg-zinc-900/70 p-1">
             {[
               ["all", "Все"],

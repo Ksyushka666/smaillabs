@@ -50,13 +50,30 @@ async function startServer() {
       const db = await getDb();
       const ownedJob = db
         ? await db
-            .select({ id: siteSettings.id })
+            .select({
+              id: siteSettings.id,
+              youtubeSyncFrequency: siteSettings.youtubeSyncFrequency,
+              youtubeLastSyncedAt: siteSettings.youtubeLastSyncedAt,
+            })
             .from(siteSettings)
             .where(eq(siteSettings.youtubeScheduleCronTaskUid, user.taskUid))
             .limit(1)
         : [];
       if (!ownedJob.length) {
         return res.json({ ok: true, skipped: "orphan" });
+      }
+      const settings = ownedJob[0];
+      const frequencySeconds = {
+        manual: 0,
+        hourly: 60 * 60,
+        every_6_hours: 6 * 60 * 60,
+        daily: 24 * 60 * 60,
+      }[settings.youtubeSyncFrequency as "manual" | "hourly" | "every_6_hours" | "daily"] ?? 24 * 60 * 60;
+      if (frequencySeconds === 0) {
+        return res.json({ ok: true, skipped: "manual" });
+      }
+      if (settings.youtubeLastSyncedAt && Date.now() - settings.youtubeLastSyncedAt.getTime() < frequencySeconds * 1000) {
+        return res.json({ ok: true, skipped: "not-due", frequency: settings.youtubeSyncFrequency });
       }
       const result = await syncYouTubeVideos();
       return res.json({ ok: true, taskUid: user.taskUid, ...result });

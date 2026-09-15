@@ -1,4 +1,4 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq, like } from "drizzle-orm";
 import { youtubeVideos, siteSettings } from "../drizzle/schema";
 import { getDb } from "./db";
 import { notifyDiscordAboutVideo } from "./discord";
@@ -174,6 +174,20 @@ async function getUploadsPlaylistVideos(uploadsPlaylistId: string) {
 export async function syncYouTubeVideos() {
   const db = await getDb();
   if (!db) throw new Error("Database not ready");
+  const settingsRows = await db
+    .select({
+      discordNotificationsEnabled: siteSettings.discordNotificationsEnabled,
+      discordNotifyShorts: siteSettings.discordNotifyShorts,
+      discordNotificationFormat: siteSettings.discordNotificationFormat,
+    })
+    .from(siteSettings)
+    .where(eq(siteSettings.key, "main"))
+    .limit(1);
+  const notificationSettings = settingsRows[0] || {
+    discordNotificationsEnabled: true,
+    discordNotifyShorts: true,
+    discordNotificationFormat: "embed",
+  };
 
   let source: "rss" | "data-api" = "rss";
   let rssVideos: RssVideo[] = [];
@@ -244,9 +258,9 @@ export async function syncYouTubeVideos() {
         },
       });
 
-    if (isNewVideo && !existingRows[0]?.discordNotifiedAt && process.env.DISCORD_YOUTUBE_WEBHOOK_URL) {
+    if (isNewVideo && !existingRows[0]?.discordNotifiedAt) {
       try {
-        await notifyDiscordAboutVideo({
+        const notification = await notifyDiscordAboutVideo({
           title,
           videoUrl: rssVideo.videoUrl,
           thumbnailUrl:
@@ -257,12 +271,18 @@ export async function syncYouTubeVideos() {
           viewCount: Number(apiVideo?.statistics?.viewCount || 0),
           likeCount: Number(apiVideo?.statistics?.likeCount || 0),
           isShort,
+        }, {
+          enabled: notificationSettings.discordNotificationsEnabled,
+          notifyShorts: notificationSettings.discordNotifyShorts,
+          format: notificationSettings.discordNotificationFormat === "text" ? "text" : "embed",
         });
-        await db
-          .update(youtubeVideos)
-          .set({ discordNotifiedAt: new Date() })
-          .where(eq(youtubeVideos.videoId, rssVideo.videoId));
-        notified += 1;
+        if (notification.sent || notification.skipped) {
+          await db
+            .update(youtubeVideos)
+            .set({ discordNotifiedAt: new Date() })
+            .where(eq(youtubeVideos.videoId, rssVideo.videoId));
+          if (notification.sent) notified += 1;
+        }
       } catch (error) {
         console.error(`[YouTube] Discord notification failed for ${rssVideo.videoId}:`, error);
       }
@@ -299,11 +319,14 @@ export type YouTubeVideoSort = "latest" | "popular";
 export async function getYouTubeVideos(
   limit = 12,
   kind: YouTubeVideoKind = "all",
-  sort: YouTubeVideoSort = "latest"
+  sort: YouTubeVideoSort = "latest",
+  search = ""
 ) {
   const db = await getDb();
   if (!db) return [];
-  const condition = kind === "shorts" ? eq(youtubeVideos.isShort, true) : kind === "video" ? eq(youtubeVideos.isShort, false) : undefined;
+  const kindCondition = kind === "shorts" ? eq(youtubeVideos.isShort, true) : kind === "video" ? eq(youtubeVideos.isShort, false) : undefined;
+  const searchCondition = search.trim() ? like(youtubeVideos.title, `%${search.trim()}%`) : undefined;
+  const condition = kindCondition && searchCondition ? and(kindCondition, searchCondition) : kindCondition || searchCondition;
   const query = db.select().from(youtubeVideos);
   if (condition) {
     return query.where(condition).orderBy(sort === "popular" ? desc(youtubeVideos.viewCount) : desc(youtubeVideos.publishedAt)).limit(limit);
@@ -314,11 +337,12 @@ export async function getYouTubeVideos(
 export async function getYouTubeOverview(
   limit = 12,
   kind: YouTubeVideoKind = "all",
-  sort: YouTubeVideoSort = "latest"
+  sort: YouTubeVideoSort = "latest",
+  search = ""
 ) {
   const db = await getDb();
   if (!db) return null;
   const settings = await db.select().from(siteSettings).where(eq(siteSettings.key, "main")).limit(1);
-  const videos = await getYouTubeVideos(limit, kind, sort);
+  const videos = await getYouTubeVideos(limit, kind, sort, search);
   return { settings: settings[0] || null, videos };
 }

@@ -24,18 +24,18 @@ export default function Team() {
           Загрузка участников команды...
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {team.map((member) => (
             <div
               key={member.id}
-              className="p-8 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-all hover:-translate-y-1 group flex flex-col items-center text-center space-y-4"
+              className="p-5 sm:p-6 lg:p-8 rounded-3xl bg-zinc-900/60 border border-zinc-800 hover:border-emerald-500/40 transition-all hover:-translate-y-1 group flex flex-col items-center text-center space-y-4 overflow-hidden"
             >
               {/* 3D Minecraft Head */}
               <div className="py-2">
                 <Minecraft3DHead
                   nick={member.minecraftNick}
                   sourceType={member.skinSourceType as any}
-                  size={120}
+                  size={100}
                   interactive={true}
                   showProfileLink={false}
                 />
