@@ -1,4 +1,5 @@
 import "dotenv/config";
+import { timingSafeEqual } from "crypto";
 import express from "express";
 import { createServer } from "http";
 import net from "net";
@@ -12,6 +13,7 @@ import { serveStatic, setupVite } from "./vite";
 import { sdk } from "./sdk";
 import { syncYouTubeVideos } from "../youtube";
 import { getDb } from "../db";
+import * as db from "../db";
 import { siteSettings } from "../../drizzle/schema";
 
 function isPortAvailable(port: number): Promise<boolean> {
@@ -86,6 +88,61 @@ async function startServer() {
       });
     }
   });
+
+  // Private API bridge for the Discord application-review bot.
+  // The bot uses its own Discord token; this bridge is protected by a separate
+  // SMAILLABS_BOT_API_TOKEN secret and never exposes that token to the browser.
+  const isBotAuthorized = (req: express.Request) => {
+    const configured = process.env.SMAILLABS_BOT_API_TOKEN;
+    const supplied = req.header("authorization")?.replace(/^Bearer\s+/i, "") || "";
+    if (!configured || !supplied || configured.length !== supplied.length) return false;
+    return timingSafeEqual(Buffer.from(configured), Buffer.from(supplied));
+  };
+
+  app.get("/api/bot/applications", async (req, res) => {
+    if (!isBotAuthorized(req)) return res.status(401).json({ error: "unauthorized" });
+    try {
+      const requestedStatus = typeof req.query.status === "string" ? req.query.status : "pending";
+      const applications = await db.getApplications();
+      const filtered = requestedStatus === "all"
+        ? applications
+        : applications.filter((application) => application.status === requestedStatus);
+      return res.json({ applications: filtered });
+    } catch (error) {
+      console.error("[Bot API] Failed to list applications", error);
+      return res.status(500).json({ error: "failed_to_list_applications" });
+    }
+  });
+
+  app.get("/api/bot/applications/:id", async (req, res) => {
+    if (!isBotAuthorized(req)) return res.status(401).json({ error: "unauthorized" });
+    try {
+      const applications = await db.getApplications();
+      const application = applications.find((item) => item.id === Number(req.params.id));
+      if (!application) return res.status(404).json({ error: "application_not_found" });
+      return res.json({ application });
+    } catch (error) {
+      console.error("[Bot API] Failed to get application", error);
+      return res.status(500).json({ error: "failed_to_get_application" });
+    }
+  });
+
+  app.patch("/api/bot/applications/:id", async (req, res) => {
+    if (!isBotAuthorized(req)) return res.status(401).json({ error: "unauthorized" });
+    const status = req.body?.status;
+    const adminNotes = typeof req.body?.adminNotes === "string" ? req.body.adminNotes : undefined;
+    if (!['pending', 'accepted', 'rejected'].includes(status)) {
+      return res.status(400).json({ error: "status_must_be_pending_accepted_or_rejected" });
+    }
+    try {
+      await db.updateApplicationStatus(Number(req.params.id), status, adminNotes);
+      return res.json({ success: true, id: Number(req.params.id), status, adminNotes: adminNotes || null });
+    } catch (error) {
+      console.error("[Bot API] Failed to update application", error);
+      return res.status(500).json({ error: "failed_to_update_application" });
+    }
+  });
+
   // tRPC API
   app.use(
     "/api/trpc",
