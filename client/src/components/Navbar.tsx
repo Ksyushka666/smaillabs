@@ -110,7 +110,7 @@ export const Navbar: React.FC = () => {
               className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg border border-orange-500/40 text-orange-300 hover:bg-orange-950/30 transition-colors"
             >
               <LogIn className="w-3.5 h-3.5" />
-              Войти
+              Войти через Google
             </Link>
           )}
         </div>
